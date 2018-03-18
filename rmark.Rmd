@@ -7,16 +7,24 @@ output: html_document
 
 ```{r setup, include=FALSE}
 require(knitr)
-require(abd)
 library(dplyr)
 library(sf)
-test <- st_read("/Users/maraljamali/Desktop/My_Lovely_DS_Project/Ward_from_2012/ward_from_2012.shp")
-#map(test)
+#library(ggplot2)
+# Adding the Washington DC shapefile (map)
+dc_map <- st_read("/Users/maraljamali/Desktop/My_Lovely_DS_Project/Ward_from_2012/ward_from_2012.shp")
+## Next the shapefile has to be converted to a dataframe for use in ggplot2
+    ##my_map <- fortify(dc_map)
+    #map <- ggplot() +
+    #geom_polygon(data = my_map,
+    #aes(x = Shape_Leng, y = #Shape_Area,     group = WARD ),
+     #color = 'gray', fill = 'white',         size = .2)
+    #ggplot(my_map)
+
 ```
 ## R Markdown
-1. Airbnb
+Airbnb
 
- Question: What factors drive Airbnb guest  satisfaction?
+Question: What factors drive Airbnb guest satisfaction?
 
 Airbnb guest satisfaction rate and their proximity to Points Of Interests (POI) with positive reviews on yelp. 
 Is there a meaningful relationship between the guest satisfaction rate and the host’s proximity to well reviewed pois? Is there a meaningful relationship between the guest satisfaction rate and neighborhood safety?
@@ -24,35 +32,49 @@ Is there a meaningful relationship between the guest satisfaction rate and the h
 Relationship between crime and airbnb guest satisfaction
 Relationship between POIs and airbnb guest satisfaction
 
+This analysis will be particularly useful to:
+
+Airbnb Hosts: those who are considering starting a new Airbnb business and become a host. They can predict the sucess rate of their business by comparing their location with the reviewed Airbnb homes. 
+
+Airbnb HQ: 
+
+
+three datasets will be used in this analysis. 
+
+DC Crime data:<https://www.kaggle.com/vinchinzu/dc-metro-crime-data/data>
+DC Airbnb homes:<http://tomslee.net/airbnb-data-collection-get-the-data>
+Yelp POI reviewes:<https://www.kaggle.com/yelp-dataset/yelp-dataset>
 
 ```{r}
 library(dplyr)
-#Quick look at the dc_crime dataset
+#  Quick look at the dc_crime dataset
 df_crime <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/dc_crime.csv", header=TRUE)
-df <- as.data.frame(df)
+  ##df <- as.data.frame(df)
 head(df,5)
-#Quick look at the Airbnb dataset
+#  Quick look at the Airbnb dataset
 df_air1 <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/DC_Airbnb/washington/airbnb_1.csv", header=TRUE)
 df_air2 <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/DC_Airbnb/washington/airbnb_2.csv", header=TRUE)
 df_air3 <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/DC_Airbnb/washington/airbnb_3.csv", header=TRUE)
-df_air1 <- as.data.frame(df_air1)
-df_air2 <- as.data.frame(df_air2)
+  ##df_air1 <- as.data.frame(df_air1)
+  #df_air2 <- as.data.frame(df_air2)
 airbnb_first2 <- rbind(df_air1, df_air2)
 head(airbnb_first2, 5)
-#Quick look at the yelp dataset
+#  Quick look at the yelp dataset
 df_yelp <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/yelp_dataset/yelp_review.csv", header = TRUE)
-df_yelp <- as.data.frame(df_yelp)
+  ##df_yelp <- as.data.frame(df_yelp)
 head(df_yelp, 5)
-#Washington DC Shapefile
+#  Washington DC Shapefile
 
 ```
 
-## Including Plots
+Methodology
+The geographical coordinates (latitude and longitude) are available in all three datasets. The Airbnb and DC_crime datasets are specific to the Washington DC area, but a new yelp review dataset needs to be created so that all the yelp reviews the POIs that are located in DC can be selected. 
 
-You can also embed plots, for example:
+I have downloaded the WAshington DC geometry and can select all the Yelp POIs that are lcoated within the DC bourndaries based on latitude and longitude using the df or ggplot libraries. The same approach can be applied for the crime and Airbnb datasets. Once the data is cleaned, the final dataset will have all dc_crime, airbnb, and yelp rows that are located within the boundaries of the DC geometry. 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+Analysis Outcome
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+The findings of this analysis will be delivered in a form of a map that offers a high level overview of this analysis (using one the R spatial packages like ggplot2), the R code, and two charts showing the following relationships:
+
+1) The relationship between the number of crimes and the nearby airbnb home rating.
+2) The relationship between the Airbnb home rating and the nearby YELP POI ratings. 
