@@ -1,22 +1,50 @@
 ---
-title: "Untitled"
+title: "AirBNB Guest Satisfaction Factors"
 author: "MJ"
 date: "3/16/2018"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+require(knitr)
+require(abd)
+library(dplyr)
+library(sf)
+test <- st_read("/Users/maraljamali/Desktop/My_Lovely_DS_Project/Ward_from_2012/ward_from_2012.shp")
+#map(test)
 ```
-
 ## R Markdown
+1. Airbnb
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+ Question: What factors drive Airbnb guest  satisfaction?
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Airbnb guest satisfaction rate and their proximity to Points Of Interests (POI) with positive reviews on yelp. 
+Is there a meaningful relationship between the guest satisfaction rate and the host’s proximity to well reviewed pois? Is there a meaningful relationship between the guest satisfaction rate and neighborhood safety?
 
-```{r cars}
-summary(cars)
+Relationship between crime and airbnb guest satisfaction
+Relationship between POIs and airbnb guest satisfaction
+
+
+```{r}
+library(dplyr)
+#Quick look at the dc_crime dataset
+df_crime <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/dc_crime.csv", header=TRUE)
+df <- as.data.frame(df)
+head(df,5)
+#Quick look at the Airbnb dataset
+df_air1 <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/DC_Airbnb/washington/airbnb_1.csv", header=TRUE)
+df_air2 <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/DC_Airbnb/washington/airbnb_2.csv", header=TRUE)
+df_air3 <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/DC_Airbnb/washington/airbnb_3.csv", header=TRUE)
+df_air1 <- as.data.frame(df_air1)
+df_air2 <- as.data.frame(df_air2)
+airbnb_first2 <- rbind(df_air1, df_air2)
+head(airbnb_first2, 5)
+#Quick look at the yelp dataset
+df_yelp <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/yelp_dataset/yelp_review.csv", header = TRUE)
+df_yelp <- as.data.frame(df_yelp)
+head(df_yelp, 5)
+#Washington DC Shapefile
+
 ```
 
 ## Including Plots
