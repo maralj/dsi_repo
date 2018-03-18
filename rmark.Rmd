@@ -11,7 +11,7 @@ library(dplyr)
 library(sf)
 #library(ggplot2)
 # Adding the Washington DC shapefile (map)
-dc_map <- st_read("/Users/maraljamali/Desktop/My_Lovely_DS_Project/Ward_from_2012/ward_from_2012.shp")
+
 ## Next the shapefile has to be converted to a dataframe for use in ggplot2
     ##my_map <- fortify(dc_map)
     #map <- ggplot() +
@@ -49,22 +49,18 @@ Yelp POI reviewes:<https://www.kaggle.com/yelp-dataset/yelp-dataset>
 library(dplyr)
 #  Quick look at the dc_crime dataset
 df_crime <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/dc_crime.csv", header=TRUE)
-  ##df <- as.data.frame(df)
 head(df,5)
 #  Quick look at the Airbnb dataset
 df_air1 <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/DC_Airbnb/washington/airbnb_1.csv", header=TRUE)
 df_air2 <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/DC_Airbnb/washington/airbnb_2.csv", header=TRUE)
 df_air3 <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/DC_Airbnb/washington/airbnb_3.csv", header=TRUE)
-  ##df_air1 <- as.data.frame(df_air1)
-  #df_air2 <- as.data.frame(df_air2)
 airbnb_first2 <- rbind(df_air1, df_air2)
 head(airbnb_first2, 5)
 #  Quick look at the yelp dataset
 df_yelp <- read.csv("/Users/maraljamali/Desktop/My_Lovely_DS_Project/yelp_dataset/yelp_review.csv", header = TRUE)
-  ##df_yelp <- as.data.frame(df_yelp)
 head(df_yelp, 5)
 #  Washington DC Shapefile
-
+dc_map <- st_read("/Users/maraljamali/Desktop/My_Lovely_DS_Project/Ward_from_2012/ward_from_2012.shp")
 ```
 
 Methodology
