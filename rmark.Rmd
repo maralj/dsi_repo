@@ -36,9 +36,6 @@ This analysis will be particularly useful to:
 
 Airbnb Hosts: those who are considering starting a new Airbnb business and become a host. They can predict the sucess rate of their business by comparing their location with the reviewed Airbnb homes. 
 
-Airbnb HQ: 
-
-
 three datasets will be used in this analysis. 
 
 DC Crime data:<https://www.kaggle.com/vinchinzu/dc-metro-crime-data/data>
@@ -64,13 +61,14 @@ dc_map <- st_read("/Users/maraljamali/Desktop/My_Lovely_DS_Project/Ward_from_201
 ```
 
 Methodology
-The geographical coordinates (latitude and longitude) are available in all three datasets. The Airbnb and DC_crime datasets are specific to the Washington DC area, but a new yelp review dataset needs to be created so that all the yelp reviews the POIs that are located in DC can be selected. 
 
-I have downloaded the WAshington DC geometry and can select all the Yelp POIs that are lcoated within the DC bourndaries based on latitude and longitude using the df or ggplot libraries. The same approach can be applied for the crime and Airbnb datasets. Once the data is cleaned, the final dataset will have all dc_crime, airbnb, and yelp rows that are located within the boundaries of the DC geometry. 
+The geographical coordinates (latitude and longitude) are available in all three datasets. The Airbnb and DC_crime datasets are specific to the Washington DC area, but a new yelp_review dataset needs to be created so that all reviews on the POIs that are located in DC can be selected. 
+
+I have downloaded the Washington DC geometry and can select all the Yelp POIs that are located within the DC bourndaries based on latitude and longitude using the sf, rgeos, or the ggplot libraries. The same approach can be applied for the crime and Airbnb datasets. Once the data is cleaned, the final dataset will have all dc_crime, airbnb, and yelp rows that are located within the boundaries of the DC geometry. 
 
 Analysis Outcome
 
-The findings of this analysis will be delivered in a form of a map that offers a high level overview of this analysis (using one the R spatial packages like ggplot2), the R code, and two charts showing the following relationships:
+The findings of this analysis will be delivered in a form of a map that offers a high level overview of this analysis (using one of the R spatial packages like ggplot2), the R code, and two charts showing the following relationships:
 
 1) The relationship between the number of crimes and the nearby airbnb home rating.
 2) The relationship between the Airbnb home rating and the nearby YELP POI ratings. 
