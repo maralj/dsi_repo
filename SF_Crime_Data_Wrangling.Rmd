@@ -1,0 +1,72 @@
+---
+title: "Data Wrangling - San Francisco Crime Data"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+My capstone project for the Springboard Introduction to Data Science course is on the impact of weather and income on crime category and frequency in San Francisco. In this assignment, I am simply trying to understand and clean the SF crime data retrieved from https://data.sfgov.org/resource/cuks-n6tp.json. 
+
+```{r}
+
+library(httr)
+library(jsonlite)
+library(data.table)
+library(dplyr)
+library(ggplot2)
+key  <- "2npKpy11t8lmg6jrzKDJMOdhx"
+r <-  GET("https://data.sfgov.org/resource/cuks-n6tp.json")
+
+#text content
+text_content <- content(r, "text", encoding = "UTF-8")
+text_content
+
+#prse with httr
+# 
+# parsed_content <- content(r, "parsed")
+# names(parsed_content)
+# parsed_content
+
+#parse with jsonlite
+crime_df <- fromJSON(text_content, flatten = TRUE)
+crime_df
+# str(crime_df)
+# head(crime_df, 5)
+#renaming the columns 
+setnames(crime_df, old = c("location.type", "location.coordinates"), new=c("location_type", "coordinates"))
+str(crime_df$coordinates)
+
+# counting missing values => 4617 NAs
+colSums(is.na(crime_df))
+sum(is.na(crime_df))
+
+#dropping unuseful columns
+crime_df_clean <- crime_df[, -grep("^:@", colnames(crime_df))]
+
+# Missing values handled -> 0 Misisng Values 
+colSums(is.na(crime_df_clean))
+sum(is.na(crime_df_clean))
+
+head(crime_df_clean, 5)
+str(crime_df_clean$category)
+
+#Detecting odd crimes AKA catgory outliers
+crime_df_clean$categor <- factor(crime_df_clean$category)
+category_outliers <- as.data.frame(count(crime_df_clean, crime_df_clean$categor))
+str(category_outliers)
+length(crime_df_clean$categor)
+
+#visualizing outliers 
+setnames(category_outliers, old = c("crime_df_clean$categor", "n"), new = c("category", "frequency"))
+ggplot(data = category_outliers, aes(y = frequency, x = reorder(category, -frequency), fill = frequency),las=2) + geom_bar(stat = "identity") + coord_flip()
+
+#visualizing the number of crimes per day of week 
+crime_count <- as.data.frame(count(crime_df_clean, crime_df_clean$dayofweek))
+setnames(crime_count, old = c("crime_df_clean$dayofweek","n"), new = c("Day", "Count"))
+head(crime_count, 5)
+ggplot(data = crime_count, aes(y = Count, x = Day, fill = Count)) + geom_bar(stat = "identity")
+
+#crime per day
+per_day <- as.data.frame(count(crime_df_clean, crime_df_clean$date))
+per_day
+```
