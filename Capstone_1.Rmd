@@ -83,15 +83,15 @@ Importing SF Crime using the RSocrata package works and returns more than 3 roas
 
 ```{r crime Rsocrata}
 
-# library(RSocrata)
-# 
-# df <- read.socrata("https://data.sfgov.org/resource/9v2m-8wqu.json",
-#                    app_token = "2npKpy11t8lmg6jrzKDJMOdhx",
-#                    email = "maral.jamali@gmail.com",
-#                    password = "Springboard29"
-#                    )
-# 
-# str(df)
+library(RSocrata)
+
+df <- read.socrata("https://data.sfgov.org/resource/9v2m-8wqu.json",
+                   app_token = "2npKpy11t8lmg6jrzKDJMOdhx",
+                   email = "Fake/Email@gmail.com",
+                   password = "FakePassword"
+                   )
+
+str(df)
 
 
 ```
