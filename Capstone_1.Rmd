@@ -1,0 +1,99 @@
+---
+title: "Capstone_1"
+author: "MJ"
+date: "4/25/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+I am merging these three datasets:
+
+1) Housing: https://www.trulia.com/home_prices/California/San_Francisco-heat_map/city_by_zip/ALP/zip/
+2) Crime: https://data.sfgov.org/Public-Safety/Police-Department-Incidents-Previous-Year-2017-/9v2m-8wqu. API
+3) Weather: https://www.wunderground.com/weather/api/d/docs?d=data/forecast&MR=1
+
+Step 1:
+
+Importing and Cleaning the Housing Data:
+* Web Scraping and creating a dataframe 
+
+Question for Amit about the housing data: 
+ How can I covert chars to int in my dataframe?
+  When I tried the following lines, some values became NA:
+      df3 <- as.data.frame(lapply(df2,function(x) as.numeric(gsub('[\\$|%$]','', x))))
+      df3 <- as.data.frame(lapply(df2,function(x) gsub('[\\$|%$]','', as.double(x)))
+      
+
+```{r housing}
+library(rvest)
+library(dplyr)
+
+# Scraping the trulia url
+html <- read_html("https://www.trulia.com/home_prices/California/San_Francisco-heat_map/city_by_zip/ALP/zip/")
+data_text3 <- html %>% html_nodes(xpath='//*[@id="heatmap_table"]/table') %>% html_table()
+#data_text1 <- html %>% html_nodes("heatmap_table.table") %>% html_table()
+
+# Converting the html table to a data frame
+df2 <- as.data.frame(data_text3)
+
+# Renaming columns
+names(df2) <- c("zipcode", "listing_price","listing_price_wow","avg_sales_price", "avg_sales_price_yoy", "median_sales_price","median_sales_yoy","sqf_price","sqf_price_yoy",    "popularity")
+
+# Dropping row 1 and 2
+df2 <- df2[-c(1:2),]
+head(df2, 6)
+colSums(is.na(df2))
+str(df2)
+
+# Dropping $ and % signs and converting all chars to int
+df3 <- as.data.frame(lapply(df2,function(x) gsub('[\\$|%$]','', x)))
+
+# Replacing "-" with NA
+df4 <- as.data.frame(lapply(df3,function(x) gsub('-','NA', x)))
+
+
+```
+Step 2:
+
+Importing the SF Crime Data API as a dataframe
+
+Question for Amit:
+This method only returns 3 rows. Why?
+
+```{r crime}
+library(jsonlite)
+library(dplyr)
+library(tidyr)
+
+data_crime <- fromJSON("https://data.sfgov.org/resource/9v2m-8wqu.json")
+
+data_crime$location <- NULL
+str(data_crime$location)
+head(data_crime, 10)
+which(names(data_crime)=="dayofweek")
+crime_week <- count(data_crime, data_crime$date)
+View(crime_week)
+```
+
+Importing SF Crime using the RSocrata package works and returns more than 3 roas, but it is very slow and inefficient. Any tips? 
+
+
+```{r crime Rsocrata}
+
+# library(RSocrata)
+# 
+# df <- read.socrata("https://data.sfgov.org/resource/9v2m-8wqu.json",
+#                    app_token = "2npKpy11t8lmg6jrzKDJMOdhx",
+#                    email = "maral.jamali@gmail.com",
+#                    password = "Springboard29"
+#                    )
+# 
+# str(df)
+
+
+```
+
+useful resource for merging sf housing and crime: https://stackoverflow.com/questions/31947969/how-to-efficiently-map-lat-long-pairs-to-zipcodes-without-an-api
